@@ -1,0 +1,52 @@
+(() => {
+  let scrollInterval = null;
+  let scrollSpeed = 10; // ms
+  let scrollStep = 1;   // px
+
+  // Buat UI kontrol
+  const panel = document.createElement('div');
+  panel.innerHTML = `
+    <div style="font-family:sans-serif;padding:10px;">
+      <strong>📜 Auto Scroll Control</strong><br><br>
+      <button id="as-start">▶️ Start</button>
+      <button id="as-pause">⏸️ Pause</button>
+      <button id="as-stop">⏹️ Stop</button><br><br>
+      <label>Speed (ms): <input id="as-speed" type="number" value="${scrollSpeed}" style="width:60px"></label><br>
+      <label>Step (px): <input id="as-step" type="number" value="${scrollStep}" style="width:60px"></label>
+    </div>
+  `;
+  Object.assign(panel.style, {
+    position: 'fixed',
+    bottom: '20px',
+    right: '20px',
+    background: '#fff',
+    border: '1px solid #ccc',
+    borderRadius: '8px',
+    boxShadow: '0 0 10px rgba(0,0,0,0.2)',
+    zIndex: 9999
+  });
+  document.body.appendChild(panel);
+
+  // Fungsi scrolling
+  const startScroll = () => {
+    stopScroll(); // pastikan tidak ada interval ganda
+    scrollSpeed = parseInt(document.getElementById('as-speed').value);
+    scrollStep = parseInt(document.getElementById('as-step').value);
+    scrollInterval = setInterval(() => {
+      window.scrollBy(0, scrollStep);
+    }, scrollSpeed);
+  };
+
+  const stopScroll = () => {
+    if (scrollInterval) clearInterval(scrollInterval);
+    scrollInterval = null;
+  };
+
+  // Event listener tombol
+  document.getElementById('as-start').onclick = startScroll;
+  document.getElementById('as-pause').onclick = stopScroll;
+  document.getElementById('as-stop').onclick = () => {
+    stopScroll();
+    panel.remove(); // hapus panel UI dari halaman
+  };
+})();

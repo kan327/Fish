@@ -1,0 +1,24 @@
+{
+  "name": "root",
+  "type": "directory",
+  "path": "./storage/root",
+  "children": [
+    {
+      "name": "test.txt",
+      "type": "file",
+      "path": "storage/root/test.txt"
+    },
+    {
+      "name": "myfolder",
+      "type": "directory",
+      "path": "storage/root/myfolder",
+      "children": [
+        {
+          "name": "hello.txt",
+          "type": "file",
+          "path": "storage/root/test.txt"
+        }
+      ]
+    }
+  ]
+}

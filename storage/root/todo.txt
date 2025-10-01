@@ -1,0 +1,37 @@
+PSD P-2
+Buatlah program perkalian 2 buat matriks (matriks A dan matriks B) yang akan
+menghasilkan matriks C. Diketahui nilai matriks A dan matriks B adalah sebagai
+berikut:
+
+Matriks A =
+
+1 3 1
+4 2 4
+9 6 3
+
+Matriks B =
+
+1 2 3
+2 0 4
+1 2 1
+========================================================================================
+
+SD P-2
+1. Jelaskan perbedaan Array 1 dimensi, Array 2 dimensi, dan Array multi dimensi?
+
+2. Kenapa Array memiliki sifat Statis?
+
+3. Tuliskan contoh deklarasi Array 1 dimensi dan Array 2 dimensi ?
+
+4. Jelaskan kapan kita menggunakan data bertipe array?
+
+5. Buat Algoritme terkait dengan data yang disimpan dengan Array!
+===========================================================================================
+
+ADOK P-3
+1.Jelaskan Pengertian Sistem Bus?
+
+2.Jelaskan uraian secara umum fungsi  saluran Bus yang dikategorikan menjadi 3  bagian?
+
+3.Berikan analisa anda penyebab bila terlalu  banyak modul atau perangkat yang  dihubungkan pada bus maka akan terjadi  penurunan kinerja?
+================================================================================================

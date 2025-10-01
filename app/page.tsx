@@ -1,103 +1,155 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { useEffect, useState } from "react";
+import axios from "axios";
+
+type FSNode = string | { name: string; children: FSNode[] };
+type DirectoryNode = { name: string; children: FSNode[] };
+
+export default function FSPage() {
+  const [path, setPath] = useState("/root");
+  const [tree, setTree] = useState<DirectoryNode | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  async function fetchDir(p: string) {
+    setLoading(true);
+    try {
+      const res = await axios.get("/api/fs", {
+        params: { p: encodeURIComponent(p) },
+      });
+      setTree(res.data);
+      setPath(p);
+    } catch (err) {
+      alert("Error: " + err);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    fetchDir("/root");
+  }, []);
+
+  // === CRUD actions ===
+  async function createFolder() {
+    const name = prompt("Folder name?");
+    if (!name) return;
+    await axios.post("/api/fs", { path, folderName: name });
+    await fetchDir(path);
+  }
+
+  async function uploadFile(e: React.ChangeEvent<HTMLInputElement>) {
+    if (!e.target.files || e.target.files.length === 0) return;
+    const file = e.target.files[0];
+    const form = new FormData();
+    form.append("path", path);
+    form.append("file", file);
+    await axios.post("/api/fs", form, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    await fetchDir(path);
+  }
+
+  async function renameNode(nodeName: string) {
+    const newName = prompt("New name?", nodeName);
+    if (!newName || newName === nodeName) return;
+    await axios.put("/api/fs", { path: path + "/" + nodeName, newName });
+    await fetchDir(path);
+  }
+
+  async function deleteNode(nodeName: string) {
+    if (!confirm(`Delete ${nodeName}?`)) return;
+    await axios.delete("/api/fs", {
+      params: { p: encodeURIComponent(path + "/" + nodeName) },
+    });
+    await fetchDir(path);
+  }
+
+  // === UI ===
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="p-6">
+      <h1 className="text-xl font-bold mb-4">File Manager</h1>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+      <div className="mb-2">
+        <span className="font-mono">{path}</span>
+      </div>
+
+      <div className="space-x-2 mb-4">
+        <button
+          className="px-3 py-1 bg-blue-500 text-white rounded"
+          onClick={createFolder}
+        >
+          + Folder
+        </button>
+        <label className="px-3 py-1 bg-green-500 text-white rounded cursor-pointer">
+          + File
+          <input
+            type="file"
+            onChange={uploadFile}
+            className="hidden"
+          />
+        </label>
+      </div>
+
+      {loading && <p>Loading...</p>}
+
+      <ul className="space-y-1">
+        {tree?.children?.map((child, i) =>
+          typeof child === "string" ? (
+            <li key={i} className="flex justify-between items-center">
+              <span>📄 {child}</span>
+              <div className="space-x-2">
+                <button
+                  className="px-2 py-0.5 bg-yellow-500 text-white rounded"
+                  onClick={() => renameNode(child)}
+                >
+                  Rename
+                </button>
+                <button
+                  className="px-2 py-0.5 bg-red-500 text-white rounded"
+                  onClick={() => deleteNode(child)}
+                >
+                  Delete
+                </button>
+              </div>
+            </li>
+          ) : (
+            <li key={i} className="flex justify-between items-center">
+              <span
+                className="cursor-pointer text-blue-600"
+                onClick={() => fetchDir(path + "/" + child.name)}
+              >
+                📂 {child.name}
+              </span>
+              <div className="space-x-2">
+                <button
+                  className="px-2 py-0.5 bg-yellow-500 text-white rounded"
+                  onClick={() => renameNode(child.name)}
+                >
+                  Rename
+                </button>
+                <button
+                  className="px-2 py-0.5 bg-red-500 text-white rounded"
+                  onClick={() => deleteNode(child.name)}
+                >
+                  Delete
+                </button>
+              </div>
+            </li>
+          )
+        )}
+      </ul>
+
+      {path !== "/root" && (
+        <div className="mt-4">
+          <button
+            className="px-3 py-1 bg-gray-400 text-white rounded"
+            onClick={() => fetchDir(path.split("/").slice(0, -1).join("/") || "/root")}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+            ⬅ Back
+          </button>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      )}
     </div>
   );
 }

@@ -1,0 +1,23 @@
+{
+  "name": "root",
+  "children": [
+    {
+      "name": "test",
+      "children": []
+    },
+    {
+      "name": "my folder",
+      "children": [
+        "autoscroll-sniippet.txt"
+      ]
+    },
+    "todo.txt",
+    {
+      "name": "test2",
+      "children": [
+        "autoscroll-sniippet.txt",
+        "[TP02][Sistem Operasi][SO].pdf"
+      ]
+    }
+  ]
+}

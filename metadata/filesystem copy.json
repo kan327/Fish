@@ -1,0 +1,44 @@
+{
+  "name": "root",
+  "children": [
+    {
+      "name": "games",
+      "children": [
+        {
+          "name": "shark",
+          "children": [
+            "finding-shark.exe"
+          ]
+        },
+        {
+          "name": "zutomayo",
+          "children": [
+            "zutomayo.exe"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "documents",
+      "children": [
+        {
+          "name": "cv",
+          "children": [
+            "mycv.pdf",
+            "portofolio.pdf"
+          ]
+        },
+        {
+          "name": "presentation",
+          "children": [
+            "company-profile.pptx",
+            "project-update.pptx"
+          ]
+        },
+        "diary.txt",
+        "notes.txt"
+      ]
+    },
+    "readme.md"
+  ]
+}
