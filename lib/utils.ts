@@ -1,6 +1,6 @@
-export function handleError(e: unknown) {
-  if (e instanceof Error) {
-    return { error: e.message };
-  }
-  return { error: "Internal Server Error (unknown error)" };
+import { clsx, type ClassValue } from "clsx"
+import { twMerge } from "tailwind-merge"
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
 }

@@ -134,7 +134,7 @@ export async function deleteNode(pathStr: string): Promise<void> {
   const parts = validateRootPath(pathStr);
   if (parts.length === 1) throw new Error("Cannot delete root");
 
-  await withLock(async () => {
+  // await withLock(async () => {
     const tree = await loadFS();
     const parentParts = parts.slice(0, -1);
     const name = parts[parts.length - 1];
@@ -152,7 +152,7 @@ export async function deleteNode(pathStr: string): Promise<void> {
     const target = joinToStorage(parts);
     // gunakan rm -r (Node 12.10+)
     await fs.promises.rm(target, { recursive: true, force: true });
-  });
+  // });
 }
 
 // rename node (update name in json and move on disk)
@@ -160,7 +160,7 @@ export async function renameNode(pathStr: string, newName: string): Promise<void
   const parts = validateRootPath(pathStr);
   if (parts.length === 1) throw new Error("Cannot rename root");
 
-  await withLock(async () => {
+  // await withLock(async () => {
     const tree = await loadFS();
     const parentParts = parts.slice(0, -1);
     const oldName = parts[parts.length - 1];
@@ -188,5 +188,5 @@ export async function renameNode(pathStr: string, newName: string): Promise<void
     const newPath = joinToStorage([...parentParts, newName]);
     await fs.promises.mkdir(path.dirname(newPath), { recursive: true });
     await fs.promises.rename(oldPath, newPath);
-  });
+  // });
 }
