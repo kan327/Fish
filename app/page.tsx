@@ -67,7 +67,7 @@ export default function FSPage() {
 
   // === UI ===
   return (
-    <div className="p-6">
+    <div className="p-6 w-full">
       <h1 className="text-xl font-bold mb-4">File Manager</h1>
 
       <div className="mb-2">

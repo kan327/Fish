@@ -1,4 +1,23 @@
 {
   "name": "root",
-  "children": []
+  "children": [
+    "Untitled.png",
+    {
+      "name": "laci1",
+      "children": [
+        {
+          "name": "dompet",
+          "children": [
+            "Untitled (1).png"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "laci2",
+      "children": [
+        "Desktop - 7.png"
+      ]
+    }
+  ]
 }

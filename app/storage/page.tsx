@@ -2,18 +2,20 @@
 
 import SButton from "@/components/GenerateButton";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import { CirclePlus, EllipsisVertical, File, FileSpreadsheet, FileText, Folder, Frame, Headphones, Image as ImgLogo, InspectionPanel, LayoutGrid, LayoutList, Maximize2, Maximize2Icon, MessageCircle, Minimize2, Minimize2Icon, SquareChevronLeft, SquareChevronRight, X } from "lucide-react";
-import Image from "next/image";
-import { useEffect, useState } from "react";
+import { CirclePlus, File, FileSpreadsheet, FileText, Folder, Headphones, Image as ImgLogo, LayoutGrid, LayoutList, SquareChevronLeft, SquareChevronRight, X } from "lucide-react";
+import CardFs from "@/components/CardFs";
+import UploadForm from "@/components/UploadForm";
+import SideMenu from "@/components/SideMenu";
+import { useState } from "react";
 
 export default function Dashboard() {
   const [filter, setFilter] = useState("");
   const [sortBy, setSortBy] = useState("");
   const [layout, setLayout] = useState<"grid" | "list">("grid");
   const [menu, setMenu] = useState(true);
-  const [fitMode, setFitMode] = useState<"cover" | "contain">("contain");
 
 
   return (
@@ -26,10 +28,15 @@ export default function Dashboard() {
               <h1 className="text-xl font-bold mb-1">Storage</h1>
               <span className="font-mono text-sm bg-primary/25">root / coba aja / mygames / minecraft</span>
               <div className="w-fit mt-2">
-                <SButton>
-                  <CirclePlus size={16} />
-                  <span>Upload</span>
-                </SButton>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <SButton>
+                      <CirclePlus size={16} />
+                      <span>Upload</span>
+                    </SButton>
+                  </DialogTrigger>
+                  <UploadForm/>
+                </Dialog>
               </div>
             </div>
 
@@ -103,65 +110,12 @@ export default function Dashboard() {
           </div> */}
 
           <div className={cn(menu ? "grid grid-cols-3 gap-4" : "grid grid-cols-4 gap-4")}>
-            <div className="flex flex-col">
-              <div className="flex justify-between items-center rounded-xl rounded-b-none border border-black py-3 px-5 bg-secondary">
-                <div className="flex gap-2 items-center">
-                  <Folder style={{
-                    stroke: "none",
-                    fill: "var(--primary)", // jika icon support fill
-                  }} />
-                  <span className="font-medium truncate w-40">Folder Name</span>
-                </div>
-
-                <EllipsisVertical size={20} />
-              </div>
-
-              <div className="relative h-32 w-full overflow-hidden border-x border-black group">
-                <Image
-                  src="https://placehold.co/40x40.jpg"
-                  alt="placeholder"
-                  fill
-                  className={`transition-all duration-300 object-${fitMode} object-center`}
-                />
-
-                {/* Toggle button, only visible on hover */}
-                <button
-                  onClick={() => setFitMode(fitMode === "contain" ? "cover" : "contain")}
-                  className="absolute bottom-2 right-2 z-10 text-xs bg-primary/25 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                >
-                  {fitMode === "contain" ? <Maximize2Icon size={15} /> : <Minimize2Icon size={15} />}
-                </button>
-              </div>
-              <div className="flex justify-between items-center rounded-xl rounded-t-none border border-black py-3 px-5 bg-secondary">
-                <div className="flex gap-2 items-center">
-                  <Image
-                    src="https://i.pravatar.cc/40"
-                    alt="avatar"
-                    width={20}
-                    height={20}
-                    className="w-6 h-6 rounded-full border border-primary cursor-pointer"
-                  />
-                  <span className="font-medium truncate w-40">Shiroko sunaookami</span>
-                </div>
-
-                <div className="flex">
-                  <Frame size={15} />
-                </div>
-              </div>
-            </div>
+            <CardFs />
           </div>
         </div>
 
         {menu && (
-          <div className="w-64 bg-gray-50 border-l p-4 ml-6">
-            <h2 className="font-bold mb-4">Menu</h2>
-            <ul className="space-y-2">
-              <li className="hover:bg-gray-200 p-2 rounded cursor-pointer">All Files</li>
-              <li className="hover:bg-gray-200 p-2 rounded cursor-pointer">Recent</li>
-              <li className="hover:bg-gray-200 p-2 rounded cursor-pointer">Starred</li>
-              <li className="hover:bg-gray-200 p-2 rounded cursor-pointer">Trash</li>
-            </ul>
-          </div>
+          <SideMenu />
         )}
       </div>
     </div>
