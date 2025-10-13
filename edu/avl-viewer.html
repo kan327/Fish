@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AVL Tree Search Animation</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2em;
+    }
+
+    .tree {
+      display: flex;
+      justify-content: center;
+      gap: 2em;
+      margin-top: 2em;
+    }
+
+    .node {
+      padding: 1em;
+      border: 2px solid #888;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      position: relative;
+      background-color: #f9f9f9;
+      transition: background-color 0.3s;
+    }
+
+    .highlight {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    .not-found {
+      background-color: crimson;
+      color: white;
+    }
+
+    button {
+      margin-top: 1em;
+      padding: 0.5em 1em;
+    }
+  </style>
+</head>
+<body>
+  <h2>AVL Tree Search Animation</h2>
+  <label>Search for name:
+    <input type="text" id="searchInput" value="Dina">
+  </label>
+  <button onclick="startSearch()">Start Search</button>
+
+  <div class="tree" id="treeContainer">
+    <!-- Tree nodes visual (manually laid out for this demo) -->
+    <div class="node" id="node-Dina">Dina</div>
+    <div class="node" id="node-Bella">Bella</div>
+    <div class="node" id="node-Eka">Eka</div>
+    <div class="node" id="node-Adam">Adam</div>
+    <div class="node" id="node-Zaki">Zaki</div>
+  </div>
+
+  <script>
+    // Simulasi node AVL secara manual (untuk demo visual)
+    const avlTree = {
+      value: "Dina",
+      left: {
+        value: "Bella",
+        left: {
+          value: "Adam",
+          left: null,
+          right: null
+        },
+        right: null
+      },
+      right: {
+        value: "Eka",
+        right: {
+          value: "Zaki",
+          right: null,
+          left: null
+        },
+        left: null
+      }
+    };
+
+    async function highlightNode(id, found = false) {
+      const el = document.getElementById("node-" + id);
+      if (el) {
+        el.classList.add(found ? "highlight" : "not-found");
+        await new Promise(r => setTimeout(r, 800));
+        if (!found) el.classList.remove("not-found");
+      }
+    }
+
+    async function startSearch() {
+      const target = document.getElementById("searchInput").value.trim();
+      resetAll();
+      await searchAVL(avlTree, target);
+    }
+
+    function resetAll() {
+      document.querySelectorAll('.node').forEach(el => {
+        el.classList.remove("highlight", "not-found");
+      });
+    } 
+
+    async function searchAVL(node, target) {
+      if (!node) return false;
+
+      await highlightNode(node.value);
+
+      if (target === node.value) {
+        await highlightNode(node.value, true);
+        return true;
+      } else if (target < node.value) {
+        return await searchAVL(node.left, target);
+      } else {
+        return await searchAVL(node.right, target);
+      }
+    }
+  </script>
+</body>
+</html>

@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Navigation from "@/components/Navigation";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,12 +31,13 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <Toaster position="top-center" />
         <div className="flex h-screen bg-white text-gray-800">
           {/* Navigation */}
           <Navigation />
 
           {/* Main Content */}
-          <main className="flex-1 flex flex-col">
+          <main className="flex-1 flex flex-col h-svh overflow-hidden">
             {/* Header */}
             <Header />
 

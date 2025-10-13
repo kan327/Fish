@@ -1,23 +1,42 @@
 {
   "name": "root",
   "children": [
-    "Untitled.png",
     {
-      "name": "laci1",
+      "name": "mai",
       "children": [
         {
-          "name": "dompet",
+          "name": "doo",
           "children": [
-            "Untitled (1).png"
+            "Untitled (1).png",
+            {
+              "name": "test",
+              "children": [
+                "Snapinsta.app_315014312_131140033068613_7526105403361240730_n_1080.jpg",
+                {
+                  "name": "ads",
+                  "children": []
+                }
+              ]
+            },
+            "【GUMI】KING【Kanaria】.mp4",
+            "Screenshot 2023-06-23 213139.png"
           ]
         }
       ]
     },
     {
-      "name": "laci2",
+      "name": "storage",
       "children": [
-        "Desktop - 7.png"
+        "Desktop - 4.png"
       ]
-    }
+    },
+    "1757334963_Arsitektur_dan_Organisasi_Komputer_01.pdf",
+    "assets (1).zip",
+    "【高音質】《Lycoris Recoil》ED - 花の塔 _さユり.mp3",
+    {
+      "name": "test",
+      "children": []
+    },
+    "meet.txt"
   ]
 }

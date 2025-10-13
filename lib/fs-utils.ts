@@ -9,7 +9,7 @@ export type FileSystemTree = DirectoryNode;
 
 const PROJECT_ROOT = process.cwd();
 export const FS_JSON = path.join(PROJECT_ROOT, "filesystem.json");
-export const STORAGE_ROOT = path.join(PROJECT_ROOT, "storage", "root");
+export const STORAGE_ROOT = path.join(PROJECT_ROOT, "public", "storage", "root");
 
 // Simple in-process mutex to avoid concurrent writes in single Node process.
 // NOTE: doesn't protect across multiple processes/instances.
